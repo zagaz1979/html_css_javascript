@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.padre {
+    background: #F23800;
+    height: 300px;
+    width: 300px;
+    /*margin: 20px;*/
+    /*margin-top: 200px;*/
+    /*margin-left: 100px;*/
+    /*margin-right: 200px;*/
+    /*margin-bottom: 200px;*/
+    /*margin-bottom: 0;*/
+    /*margin: 20px 100px;*/  /*arriba y abajo = 20px y izquierda y derecha 100px*/
+    /*margin: 50px 50px 100px 100px;*/ /* 50px arriba 50px derecha 100px abajo 100px izquierda */
+
+    padding: 20px;
+}
+
+.hijo {
+    background: black;
+    height: 100px;
+    width: 100px;
+}
+
+/*
+.hijo {
+    background: black;
+    height: 100px;
+    width: 100px;
+    margin: 120px;
+}
+*/    
+
+/*
+h2 {
+    color: forestgreen;
+}
+
+p {
+    color: blueviolet;
+}
+
+div {
+    color: chartreuse;
+}
+
+.segundo-div {
+    color: aqua;
+}
+*/    

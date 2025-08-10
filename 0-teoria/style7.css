@@ -1,0 +1,15 @@
+.padre {
+    width: 200px;
+    height: 200px;
+    background: #F13929;
+    position: fixed;
+    /*left: 50%;*/ /*50px ó 50% */ 
+    right: 0;
+    bottom: 0;
+}
+
+.hijo {
+    width: 300px;
+    height: 300px;
+    background: #7888EA;
+}

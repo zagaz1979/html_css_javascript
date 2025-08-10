@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background: black;
+}
+
+.container {
+    background: #202020;
+    display: flex;
+    justify-content: space-evenly; /*center; space-between; space-evenly;*/
+    align-items: center;
+    height: 100vh; /* todo el alto de la pantalla */
+    flex-wrap: wrap; /* Envoltura flexible sino cabe se pasa hacia abajo */
+    gap: 50px;
+    /*flex-direction: column;*/
+    /*flex-direction: row-reverse;*/
+    /*flex-direction: column-reverse;*/
+}
+
+.uno {
+    background: #F13929;
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;    
+}
+
+.dos {
+    background: #7250FF;
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;        
+}
+
+.tres {
+    background: #01D0FB;
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;        
+}
