@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Python</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .quiz-title {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .question-card {
+            background-color: #ecf0f1;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            color: #34495e;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .answer-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .answer-btn.correct {
+            background-color: #27ae60;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .answer-btn.incorrect {
+            background-color: #e74c3c;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .result-message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-message.correct {
+            color: #27ae60;
+        }
+
+        .result-message.incorrect {
+            color: #e74c3c;
+        }
+        
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #7f8c8d;
+            margin-top: 15px;
+        }
+
+        .next-btn {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 25px;
+            display: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: none;
+        }
+
+        .restart-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            .quiz-title {
+                font-size: 2rem;
+            }
+            .question-text {
+                font-size: 1.2rem;
+            }
+            .answer-btn {
+                font-size: 0.9rem;
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1 class="quiz-title">Quiz de Python</h1>
+        <div class="question-card">
+            <p id="question-text" class="question-text"></p>
+            <div id="answers-container" class="answers"></div>
+        </div>
+        <p id="result-message" class="result-message"></p>
+        <p id="score-display" class="score-display"></p>
+        <button id="next-button" class="next-btn">Siguiente</button>
+        <button id="restart-button" class="restart-btn">Reiniciar Quiz</button>
+    </div>
+
+    <script>
+        // Array de objetos para las preguntas y respuestas
+        const questions = [
+            {
+                question: "¿Cuál es la palabra clave para definir una función en Python?",
+                answers: [
+                    { text: "function", correct: false },
+                    { text: "def", correct: true },
+                    { text: "fun", correct: false },
+                    { text: "define", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué tipo de dato se usa para una secuencia de caracteres?",
+                answers: [
+                    { text: "float", correct: false },
+                    { text: "int", correct: false },
+                    { text: "str", correct: true },
+                    { text: "bool", correct: false }
+                ]
+            },
+            {
+                question: "¿Cómo se importa un módulo llamado 'math'?",
+                answers: [
+                    { text: "include math", correct: false },
+                    { text: "import math", correct: true },
+                    { text: "using math", correct: false },
+                    { text: "require math", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué operador se utiliza para la exponenciación?",
+                answers: [
+                    { text: "**", correct: true },
+                    { text: "^", correct: false },
+                    { text: "//", correct: false },
+                    { text: "x", correct: false }
+                ]
+            },
+            {
+                question: "¿Cuál de las siguientes opciones es un tipo de dato mutable?",
+                answers: [
+                    { text: "tuple", correct: false },
+                    { text: "str", correct: false },
+                    { text: "list", correct: true },
+                    { text: "int", correct: false }
+                ]
+            }
+        ];
+
+        // Obtener elementos del DOM
+        const questionText = document.getElementById('question-text');
+        const answersContainer = document.getElementById('answers-container');
+        const resultMessage = document.getElementById('result-message');
+        const scoreDisplay = document.getElementById('score-display');
+        const nextButton = document.getElementById('next-button');
+        const restartButton = document.getElementById('restart-button');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Función para iniciar el quiz
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreDisplay.textContent = '';
+            nextButton.style.display = 'none';
+            restartButton.style.display = 'none';
+            showQuestion();
+        }
+
+        // Función para mostrar la pregunta actual
+        function showQuestion() {
+            resetState();
+            const currentQuestion = questions[currentQuestionIndex];
+            questionText.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+            
+            // Crear botones para cada respuesta
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer.text;
+                button.classList.add('answer-btn');
+                answersContainer.appendChild(button);
+
+                if (answer.correct) {
+                    button.dataset.correct = "true";
+                }
+                button.addEventListener('click', selectAnswer);
+            });
+        }
+
+        // Función para limpiar el estado del UI
+        function resetState() {
+            resultMessage.style.display = 'none';
+            resultMessage.textContent = '';
+            nextButton.style.display = 'none';
+            while(answersContainer.firstChild) {
+                answersContainer.removeChild(answersContainer.firstChild);
+            }
+        }
+
+        // Función para manejar la selección de una respuesta
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const isCorrect = selectedButton.dataset.correct === "true";
+            
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
+                resultMessage.textContent = '¡Correcto!';
+                resultMessage.classList.add('correct');
+                resultMessage.classList.remove('incorrect');
+                score++;
+            } else {
+                selectedButton.classList.add('incorrect');
+                resultMessage.textContent = 'Incorrecto.';
+                resultMessage.classList.add('incorrect');
+                resultMessage.classList.remove('correct');
+            }
+            
+            resultMessage.style.display = 'block';
+
+            // Deshabilitar todos los botones después de la selección
+            Array.from(answersContainer.children).forEach(button => {
+                button.disabled = true;
+                if (button.dataset.correct === "true") {
+                    button.classList.add('correct');
+                }
+            });
+
+            updateScoreDisplay();
+            nextButton.style.display = 'block';
+        }
+
+        // Función para actualizar la puntuación
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = `Puntuación: ${score} de ${questions.length}`;
+        }
+
+        // Función para manejar el botón "Siguiente"
+        function handleNextButton() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        // Función para mostrar la puntuación final
+        function showScore() {
+            resetState();
+            questionText.textContent = `¡Has completado el quiz!`;
+            scoreDisplay.textContent = `Tu puntuación final es ${score} de ${questions.length}.`;
+            restartButton.style.display = 'block';
+            nextButton.style.display = 'none';
+        }
+
+        // Event listeners para los botones
+        nextButton.addEventListener('click', handleNextButton);
+        restartButton.addEventListener('click', startQuiz);
+
+        // Iniciar el quiz cuando la página se carga
+        startQuiz();
+    </script>
+
+</body>
+</html>
